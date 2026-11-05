@@ -1,4 +1,4 @@
-name: Import case gameplay screenshots
+name: Import game screenshots
 on:
   push:
     paths:
@@ -10,22 +10,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download gameplay images from source article
+      - name: Download game screenshots
         run: |
-          set -euo pipefail
-          mkdir -p site/assets
-          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/aa/08/aa0842eb-ce26-4b7c-ba02-7553e8176434.png' -o site/assets/case-1-cover.png
-          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/e9/e6/e9e69a6f-2841-4020-9c1d-7117454f1aaa.png' -o site/assets/case-2-cover.png
-          curl --fail --location --retry 3 --max-time 60 'https://img2.teletype.in/files/17/69/1769f777-6ca2-4f89-9c5d-6cd28fa2d3aa.png' -o site/assets/case-3-cover.png
-          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/f2/47/f247a10b-89c3-4faf-9dea-09331d06c995.png' -o site/assets/case-4-cover.png
-          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/b7/41/b741ae11-9bde-4b4c-9b53-a663f348f536.png' -o site/assets/case-5-cover.png
-          curl --fail --location --retry 3 --max-time 60 'https://img1.teletype.in/files/06/16/061649e6-9a6f-4c2a-a80e-ff9f56ce33ca.png' -o site/assets/case-6-cover.png
-          file site/assets/case-*-cover.png
-      - name: Save gameplay images to an import branch
+          python -m pip install --quiet google-play-scraper
+          python - <<'PY'
+          from google_play_scraper import search, app
+          from urllib.request import Request, urlopen
+          from pathlib import Path
+          import json
+          out = Path('site/assets'); out.mkdir(parents=True, exist_ok=True)
+          queries = {3:'Phoenix 2 Firi Games',4:'Over Rush Runner Game Inpleron',5:'Stick Fighter Battle Stickman Levis Kron',6:'Anger Foot 3D Shakabuy Games'}
+          report = {}
+          for n, query in queries.items():
+              hits = search(query, lang='en', country='us', n_hits=6)
+              report[n] = [{'title':h.get('title'),'appId':h.get('appId')} for h in hits]
+              if not hits: continue
+              wanted = {3:'Phoenix 2',4:'Over Rush: Runner Game',5:'Stick Fighter: Battle Stickman',6:'Anger Foot 3D'}[n]
+              hit = next((h for h in hits if h.get('title','').casefold()==wanted.casefold()), hits[0])
+              info = app(hit['appId'], lang='en', country='us')
+              report[n].append({'selected':hit['appId'],'screenshots':len(info.get('screenshots',[]))})
+              for k,url in enumerate(info.get('screenshots',[])[:6],1):
+                  req=Request(url, headers={'User-Agent':'Mozilla/5.0'})
+                  try:
+                      data=urlopen(req, timeout=30).read()
+                      (out/f'game-{n}-{k}.jpg').write_bytes(data)
+                  except Exception as e: report[n].append({'failed':k,'error':str(e)})
+          (out/'game-image-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+          file site/assets/game-*.jpg || true
+      - name: Save downloaded images
         run: |
-          set -euo pipefail
           git config user.name 'Codex image import'
           git config user.email 'codex@users.noreply.github.com'
-          git add site/assets/case-*-cover.png
-          git commit -m 'Import game cover screenshots from Teletype article'
-          git push origin HEAD:refs/heads/case-covers-import
+          git add site/assets/game-* site/assets/game-image-report.json
+          git commit -m 'Import game screenshots from store listings'
+          git push origin HEAD:refs/heads/game-screenshots-import
