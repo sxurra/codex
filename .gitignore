@@ -1,0 +1,36 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# JavaScript and frontend
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+coverage/
+.cache/
+.turbo/
+
+# Python
+__pycache__/
+.venv/
+venv/
+*.pyc
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local logs
+*.log
+logs/
