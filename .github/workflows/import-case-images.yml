@@ -14,6 +14,12 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p site/assets
+          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/aa/08/aa0842eb-ce26-4b7c-ba02-7553e8176434.png' -o site/assets/case-1-cover.png
+          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/e9/e6/e9e69a6f-2841-4020-9c1d-7117454f1aaa.png' -o site/assets/case-2-cover.png
+          curl --fail --location --retry 3 --max-time 60 'https://img2.teletype.in/files/17/69/1769f777-6ca2-4f89-9c5d-6cd28fa2d3aa.png' -o site/assets/case-3-cover.png
+          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/f2/47/f247a10b-89c3-4faf-9dea-09331d06c995.png' -o site/assets/case-4-cover.png
+          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/b7/41/b741ae11-9bde-4b4c-9b53-a663f348f536.png' -o site/assets/case-5-cover.png
+          curl --fail --location --retry 3 --max-time 60 'https://img1.teletype.in/files/06/16/061649e6-9a6f-4c2a-a80e-ff9f56ce33ca.png' -o site/assets/case-6-cover.png
           file site/assets/case-*-cover.png
       - name: Save gameplay images to an import branch
         run: |
