@@ -2,17 +2,39 @@
 
 Private repository for a project worked on with Codex.
 
-## First computer
-1. Open your existing project folder.
-2. If the project has no Git repository, initialize Git and add `https://github.com/sxurra/codex.git` as `origin`. If it already has a remote, inspect it before changing anything.
-3. Import or merge this repository's starter files safely. Do not force-push or overwrite existing commits.
-4. Commit and push your project files once the histories and branches are aligned.
+## Windows computers
 
-## Second computer
-1. Sign in to GitHub with authorized Git credentials and clone `https://github.com/sxurra/codex.git`.
-2. Install project dependencies and create your local `.env` using `.env.example` if needed.
-3. Open that cloned folder in Codex and work from the current Git branch.
-4. Pull remote updates before beginning and commit/push when finished.
+Install Git for Windows and sign in to GitHub using Git Credential Manager (HTTPS) or an SSH key. Never put a token in the remote URL or commit it. In PowerShell, clone this repository on the first computer:
+
+```powershell
+git clone https://github.com/sxurra/codex.git
+cd codex
+git switch main
+```
+
+Open this folder in Codex. Keep project files and changes inside the clone, and commit only files needed by the project. Before staging, inspect `git status` and the diff; `.gitignore` excludes environment files, keys, tokens, dependency folders, and temporary files. Ignore rules do not remove files already tracked, so inspect those explicitly before the first push. Keep required `.env` values local and share variable names through `.env.example` without values.
+
+## Using the second computer
+
+Clone the same repository on the second computer using the commands above. Before starting work on either computer, fetch and update the local `main` branch:
+
+```powershell
+git switch main
+git pull --ff-only origin main
+```
+
+After making changes, review and commit them, then push:
+
+```powershell
+git status
+git diff
+git add <project-files>
+git diff --cached
+git commit -m "Describe the change"
+git push origin main
+```
+
+Finish and push work on one computer before switching to the other. If a push is rejected, fetch and integrate the remote changes; never force-push or discard work to make histories align. Install project dependencies separately on each computer using the project's documented instructions.
 
 ## Important
 - Codex conversations are not synced by Git. The repository stores committed files and their commit history.

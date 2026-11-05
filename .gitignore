@@ -6,6 +6,14 @@
 *.key
 *.p12
 *.pfx
+*.pub
+*.token
+*.secret
+*.credentials
+id_rsa
+id_ed25519
+id_ecdsa
+*.mobileprovision
 credentials.json
 service-account*.json
 
@@ -34,3 +42,13 @@ Thumbs.db
 # Local logs
 *.log
 logs/
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.old
+*.orig
+~$*
+Temp/
+tmp/
