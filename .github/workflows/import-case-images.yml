@@ -1,4 +1,4 @@
-name: Import case screenshots
+name: Import case gameplay screenshots
 on:
   push:
     paths:
@@ -10,22 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download screenshots from source article
+      - name: Download gameplay images from source article
         run: |
           set -euo pipefail
           mkdir -p site/assets
-          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/aa/08/aa0842eb-ce26-4b7c-ba02-7553e8176434.png' -o site/assets/case-1.png
-          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/e9/e6/e9e69a6f-2841-4020-9c1d-7117454f1aaa.png' -o site/assets/case-2.png
-          curl --fail --location --retry 3 --max-time 60 'https://img2.teletype.in/files/17/69/1769f777-6ca2-4f89-9c5d-6cd28fa2d3aa.png' -o site/assets/case-3.png
-          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/f2/47/f247a10b-89c3-4faf-9dea-09331d06c995.png' -o site/assets/case-4.png
-          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/b7/41/b741ae11-9bde-4b4c-9b53-a663f348f536.png' -o site/assets/case-5.png
-          curl --fail --location --retry 3 --max-time 60 'https://img1.teletype.in/files/06/16/061649e6-9a6f-4c2a-a80e-ff9f56ce33ca.png' -o site/assets/case-6.png
-          file site/assets/case-*.png
-      - name: Save screenshots to an import branch
+          curl --fail --location --retry 3 --max-time 60 'https://img2.teletype.in/files/9f/7a/9f7a0e26-c3ca-4ea4-9a22-38b65ea93db5.png' -o site/assets/case-1-shot.png
+          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/e1/81/e1811974-0370-4073-82b7-4a3932912265.png' -o site/assets/case-2-shot.png
+          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/fd/a6/fda6b7ca-a2dc-47fe-9a3a-496a518c45c8.png' -o site/assets/case-2-alt.png
+          curl --fail --location --retry 3 --max-time 60 'https://img2.teletype.in/files/57/33/573305c7-004f-4a50-91e6-e2788ea82d69.jpeg' -o site/assets/case-3-shot.jpg
+          curl --fail --location --retry 3 --max-time 60 'https://img1.teletype.in/files/8c/c1/8cc17e5a-1aec-4deb-8be2-2ebb7f3d8c28.png' -o site/assets/case-3-alt.png
+          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/a8/4d/a84daaca-8c21-4189-b133-bfef3b44064c.jpeg' -o site/assets/case-4-shot.jpg
+          curl --fail --location --retry 3 --max-time 60 'https://img2.teletype.in/files/de/55/de554238-1d31-411a-a3ba-0d655fdfad28.png' -o site/assets/case-4-alt.png
+          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/6a/a2/6aa2d641-2d0c-446f-bcf5-4b0821876e7a.jpeg' -o site/assets/case-5-shot.jpg
+          curl --fail --location --retry 3 --max-time 60 'https://img3.teletype.in/files/a0/3c/a03ca6f2-2e83-411a-9abe-0a057db030b6.png' -o site/assets/case-5-alt.png
+          curl --fail --location --retry 3 --max-time 60 'https://img4.teletype.in/files/34/09/340901e6-8d3c-4f71-9054-092e298983e3.png' -o site/assets/case-6-shot.png
+          file site/assets/case-*-shot.* site/assets/case-*-alt.*
+      - name: Save gameplay images to an import branch
         run: |
           set -euo pipefail
           git config user.name 'Codex image import'
           git config user.email 'codex@users.noreply.github.com'
-          git add site/assets/case-*.png
-          git commit -m 'Import case screenshots from Teletype article'
-          git push origin HEAD:refs/heads/case-image-import
+          git add site/assets/case-*-shot.* site/assets/case-*-alt.*
+          git commit -m 'Import gameplay screenshots from Teletype article'
+          git push origin HEAD:refs/heads/case-screenshots-import
