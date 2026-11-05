@@ -22,12 +22,20 @@ jobs:
           queries = {3:'Phoenix 2 Firi Games',4:'Over Rush Runner Game Inpleron',5:'Stick Fighter Battle Stickman Levis Kron',6:'Anger Foot 3D Shakabuy Games'}
           report = {}
           for n, query in queries.items():
-              hits = search(query, lang='en', country='us', n_hits=6)
+              try:
+                  hits = search(query, lang='en', country='us', n_hits=6)
+              except Exception as e:
+                  report[n] = {'error': str(e)}
+                  continue
               report[n] = [{'title':h.get('title'),'appId':h.get('appId')} for h in hits]
               if not hits: continue
               wanted = {3:'Phoenix 2',4:'Over Rush: Runner Game',5:'Stick Fighter: Battle Stickman',6:'Anger Foot 3D'}[n]
               hit = next((h for h in hits if h.get('title','').casefold()==wanted.casefold()), hits[0])
-              info = app(hit['appId'], lang='en', country='us')
+              try:
+                  info = app(hit['appId'], lang='en', country='us')
+              except Exception as e:
+                  report[n].append({'error': str(e)})
+                  continue
               report[n].append({'selected':hit['appId'],'screenshots':len(info.get('screenshots',[]))})
               for k,url in enumerate(info.get('screenshots',[])[:6],1):
                   req=Request(url, headers={'User-Agent':'Mozilla/5.0'})
