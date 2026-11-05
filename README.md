@@ -2,6 +2,21 @@
 
 Private repository for a project worked on with Codex.
 
+## Website handoff
+
+The editable website is in `site/`. Keep `site/index.html`, `site/assets/`, and
+`site/uploads/` together when sharing it with another editor or AI assistant.
+The page template, styles, and copy are embedded in `site/index.html` as a JSON
+string inside `<script type="__bundler/template">`; edits must preserve valid
+JSON and the surrounding HTML. The site is static and needs no environment
+variables. To preview it locally, run `python -m http.server 8000 --directory
+site` and open `http://localhost:8000/`.
+
+GitHub Pages serves the `gh-pages` branch from its root. Publishing changes
+requires copying `site/index.html` to `index.html` on that branch and copying
+the `site/assets/` and `site/uploads/` folders alongside it, then pushing the
+branch. Changes on `main` alone do not update the public site.
+
 ## Windows computers
 
 Install Git for Windows and sign in to GitHub using Git Credential Manager (HTTPS) or an SSH key. Never put a token in the remote URL or commit it. In PowerShell, clone this repository on the first computer:
